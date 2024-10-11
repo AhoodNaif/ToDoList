@@ -5,10 +5,12 @@ class Task:
     # Method to add a task
     def add_task(self):
         task = input("Enter the task description: ")
-        priority = input("Enter the task priority (as a number): ")
-
-        if task and priority.isdigit():  # Check if task is not empty and priority is a number
-            priority = int(priority)  # Convert priority to integer
+        try: # this code may throw an exception
+         priority = int(input("Enter the task priority number from 1 to 3: \n 1:(high priority) \n 2: (medium priority) \n 3: (low priority) \n"))
+        except:
+            print("Please make sure you have entered priority number")
+        else: # this code block will execute if try does not throw an exception
+         if priority in range(1,4):
             d = {
                 "id": self.number,
                 "task": task,
@@ -18,8 +20,8 @@ class Task:
             self.number += 1  # Increment ID for the next task
             self.li.append(d)  # Add the task to the list
             print(f"Task '{task}' added successfully with ID: {d['id']}")
-        else:
-            print("Please enter a valid task and numeric priority.")
+         else:
+            print("Please enter a valid task and priority.")
 
     # Method to edit a task
     def edit_task(self):
@@ -66,17 +68,15 @@ class Task:
         print("Task not found with the provided ID.")
 
     # Method to show number of completed tasks
-    def compleated_tasks(self):
-        if not self.li:  # Check if the task list is empty
+    def completed_tasks(self):
+        if not self.li:  
             print("No tasks available.")
             return
 
-        count = 0  # Initialize the count of completed tasks
-        for l in self.li:
-            if l["is_complated"] == 1:  # Check if the task is marked as completed
-                count += 1
+        # Using lambda 
+        completed_count = len(list(filter(lambda x: x["is_complated"] == 1, self.li)))
 
-        print("Total of completed tasks is:", count)
+        print("Total of completed tasks is:", completed_count)
 
     # Method to display all tasks
     def display_tasks(self):
@@ -110,7 +110,7 @@ def main():
         elif choice == '4':
             task_manager.display_tasks()
         elif choice == '5':
-            task_manager.compleated_tasks()  # Fixed typo here
+            task_manager.completed_tasks()
         elif choice == '6':
             print("Exiting task manager.")
             break
