@@ -101,12 +101,12 @@
                 <option value="3" id="low">Low</option>
                 {% endif %}
             </select>
-            <button id="taskInputSubmit" onclick="edit_task({{ result['id'] }})">↺</button>
+            <button id="taskInputSubmit" style="font-size: small;" onclick="edit_task({{ result['id'] }})">Back</button>
             <br>
             {% if result['is_complated'] %}
-            <input type="checkbox" id="complate" checked><label id="checkLable" for="complate">Is it Complate</label> 
+            <input type="checkbox" id="complate" checked><label id="checkLable" for="complate">Not Complated?</label> 
             {% else %}
-            <input type="checkbox" id="complate"><label id="checkLable" for="complate">Is it Complate</label> 
+            <input type="checkbox" id="complate"><label id="checkLable" for="complate">Complated?</label> 
             {% endif %}
         </div>
     </div>

@@ -1,13 +1,24 @@
 from flask import Flask, redirect, render_template, request  # Import necessary Flask modules
 from Task import Task  # Import the Task class from the Task module
 
+<<<<<<< HEAD
 app = Flask(__name__)  # Create a new Flask application instance
 task = Task()  # Create a new Task object to manage tasks
+=======
+app = Flask(__name__)
+task = Task()
+completed_count = 0
+>>>>>>> 7b9b4556b1c088c023cf1a6881fdc508e135d3c8
 
 @app.route("/")  # Define the route for the home page
 def home():
+<<<<<<< HEAD
     # Render the home template and pass the list of tasks to it
     return render_template("home.html", li=task.display_tasks())
+=======
+    completed_count = len(list(filter(lambda x: x["is_complated"] == 1, task.li)))
+    return render_template("home.html", li = task.display_tasks(), count=completed_count)
+>>>>>>> 7b9b4556b1c088c023cf1a6881fdc508e135d3c8
 
 @app.route('/edit/<int:task_id>')  # Define the route to edit a task with a specific ID
 def get_edit(task_id):
