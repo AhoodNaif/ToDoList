@@ -3,53 +3,35 @@ class Task:
     li = []     # List to hold tasks
 
     # Method to add a task
-    def add_task(self):
-        task = input("Enter the task description: ")
-        try: # this code may throw an exception
-         priority = int(input("Enter the task priority number from 1 to 3: \n 1:(high priority) \n 2: (medium priority) \n 3: (low priority) \n"))
-        except:
-            print("Please make sure you have entered priority number")
-        else: # this code block will execute if try does not throw an exception
-         if priority in range(1,4):
-            d = {
-                "id": self.number,
-                "task": task,
-                "priority": priority,
-                "is_complated": 2  # Default: task not completed
-            }
-            self.number += 1  # Increment ID for the next task
-            self.li.append(d)  # Add the task to the list
-            print(f"Task '{task}' added successfully with ID: {d['id']}")
-         else:
-            print("Please enter a valid task and priority.")
+    def add_task(self, task, priority):
+        d = {
+            "id": self.number,
+            "task": task,
+            "priority": priority,
+            "is_complated": 2  # Default: task not completed
+        }
+        self.number += 1  # Increment ID for the next task
+        self.li.append(d)  # Add the task to the list
+        return True
+         
 
     # Method to edit a task
-    def edit_task(self):
-        try:
-            id = int(input("Enter the task ID to edit: "))
-        except ValueError:
-            print("Please enter a valid ID.")
-            return
-
-        # Find the task by ID
+    def edit_task(self, ind, task, priority, is_completed):
+        # Update values if provided
+        if task:
+            self.li[ind]["task"] = task
+        if priority.isdigit():
+            self.li[ind]["priority"] = int(priority)
+        if is_completed in ['1', '2']:
+            self.li[ind]["is_complated"] = int(is_completed)
+        return True
+    
+    # Find the task by ID
+    def is_valid(self, id):
         for ind, l in enumerate(self.li):
             if id == l["id"]:
-                new_task = input("Enter new task description (leave blank to keep current): ")
-                new_priority = input("Enter new priority (leave blank to keep current): ")
-                new_is_completed = input("Enter 1 for completed or 2 for not completed (leave blank to keep current): ")
-
-                # Update values if provided
-                if new_task:
-                    self.li[ind]["task"] = new_task
-                if new_priority.isdigit():
-                    self.li[ind]["priority"] = int(new_priority)
-                if new_is_completed in ['1', '2']:
-                    self.li[ind]["is_complated"] = int(new_is_completed)
-
-                print(f"Task ID {id} has been updated.")
-                return
-
-        print("Task not found with the provided ID.")
+                return ind + 1
+        return False
 
     # Method to delete a task
     def delete_task(self):
@@ -102,9 +84,31 @@ def main():
 
         choice = input("Enter your choice (1-6): ")
         if choice == '1':
-            task_manager.add_task()
+            task = input("Enter the task description: ")
+            try: # this code may throw an exception
+                priority = int(input("Enter the task priority number from 1 to 3: \n 1:(high priority) \n 2: (medium priority) \n 3: (low priority) \n"))
+            except:
+                print("Please make sure you have entered priority number")
+            else: # this code block will execute if try does not throw an exception
+                if priority in range(1,4):
+                    if task_manager.add_task(task, priority):
+                        print(f"Task '{task}' added successfully with ID: {task_manager.li[-1]['id']}")
+                else:
+                    print("Please enter a valid task and priority.")
         elif choice == '2':
-            task_manager.edit_task()
+            try:
+                id = int(input("Enter the task ID to edit: "))
+                ind = task_manager.is_valid(id)
+                if ind > 0:
+                    new_task = input("Enter new task description (leave blank to keep current): ")
+                    new_priority = input("Enter new priority (leave blank to keep current): ")
+                    new_is_completed = input("Enter 1 for completed or 2 for not completed (leave blank to keep current): ")
+                    if task_manager.edit_task(ind - 1, new_task, new_priority, new_is_completed):
+                        print(f"Task ID {id} has been updated.")
+                else:
+                    print("Task not found with the provided ID.")
+            except ValueError:
+                print("Please enter a valid ID.")
         elif choice == '3':
             task_manager.delete_task()
         elif choice == '4':
