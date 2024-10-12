@@ -3,10 +3,12 @@ from Task import Task
 
 app = Flask(__name__)
 task = Task()
+completed_count = 0
 
 @app.route("/")
 def home():
-    return render_template("home.html", li = task.display_tasks())
+    completed_count = len(list(filter(lambda x: x["is_complated"] == 1, task.li)))
+    return render_template("home.html", li = task.display_tasks(), count=completed_count)
 
 @app.route('/edit/<int:task_id>')
 def get_edit(task_id):
