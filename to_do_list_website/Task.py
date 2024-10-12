@@ -1,63 +1,67 @@
 class Task:
-    number = 1  # Task ID counter
-    li = []     # List to hold tasks
+    number = 1  # Task ID counter to uniquely identify each task
+    li = []     # List to hold all tasks
 
     # Method to add a task
     def add_task(self, task, priority):
+        # Create a dictionary to represent the task with its attributes
         d = {
-            "id": self.number,
-            "task": task,
-            "priority": priority,
-            "is_complated": False  # Default: task not completed
+            "id": self.number,              # Assign a unique ID to the task
+            "task": task,                   # Task description
+            "priority": priority,           # Task priority level
+            "is_complated": False           # Default: task is not completed
         }
-        self.number += 1  # Increment ID for the next task
-        self.li.append(d)  # Add the task to the list
-        return True
-         
-    # Find the task by ID
+        self.number += 1  # Increment the ID counter for the next task
+        self.li.append(d)  # Add the new task to the list of tasks
+        return True  # Return True to indicate success
+
+    # Method to find the index of a task by its ID
     def is_valid(self, id):
+        # Iterate through the list of tasks to check for the ID
         for ind, l in enumerate(self.li):
-            if id == l["id"]:
-                return ind + 1
-        return False
+            if id == l["id"]:  # If a match is found
+                return ind + 1  # Return the index (1-based)
+        return False  # Return False if ID not found
 
     # Method to edit a task
     def edit_task(self, ind, task, priority, is_completed):
-        # Update values if provided
-        if task:
-            self.li[ind]["task"] = task
-        if priority:
-            self.li[ind]["priority"] = priority
-        self.li[ind]["is_complated"] = is_completed
-        return True
+        # Update the task attributes if new values are provided
+        if task:  # Check if a new task description is provided
+            self.li[ind]["task"] = task  # Update task description
+        if priority:  # Check if a new priority is provided
+            self.li[ind]["priority"] = priority  # Update priority
+        self.li[ind]["is_complated"] = is_completed  # Update completion status
+        return True  # Return True to indicate success
 
-    # Method to delete a task
+    # Method to delete a task by index
     def delete_task(self, ind):
-        if self.li.pop(ind):  # Remove task from the list
+        # Remove the task from the list and return True if successful
+        if self.li.pop(ind):  # Attempt to remove task at the specified index
             return True
-        return False
+        return False  # Return False if deletion was unsuccessful
 
-    # Method to show number of completed tasks
+    # Method to count the number of completed tasks
     def completed_tasks(self):
-        if not self.li:  
+        if not self.li:  # Check if the task list is empty
             return False
-        # Using lambda 
+        # Use a lambda function to filter and count completed tasks
         completed_count = len(list(filter(lambda x: x["is_complated"] == 1, self.li)))
-        return completed_count
+        return completed_count  # Return the count of completed tasks
 
     # Method to display all tasks
     def display_tasks(self):
-        if not self.li:
+        if not self.li:  # Check if there are no tasks to display
             return False
         else:
-            return self.li
+            return self.li  # Return the list of all tasks
     
+    # Method to display a specific task by index
     def display_task(self, ind):
-        task = self.li[ind]
-        if not task:
+        task = self.li[ind]  # Get the task at the specified index
+        if not task:  # Check if the task is valid
             return False
         else:
-            return task
+            return task  # Return the task details
 
 # Main interaction loop
 # def main():
