@@ -14,6 +14,12 @@ class Task:
         self.li.append(d)  # Add the task to the list
         return True
          
+    # Find the task by ID
+    def is_valid(self, id):
+        for ind, l in enumerate(self.li):
+            if id == l["id"]:
+                return ind + 1
+        return False
 
     # Method to edit a task
     def edit_task(self, ind, task, priority, is_completed):
@@ -25,50 +31,27 @@ class Task:
         if is_completed in ['1', '2']:
             self.li[ind]["is_complated"] = int(is_completed)
         return True
-    
-    # Find the task by ID
-    def is_valid(self, id):
-        for ind, l in enumerate(self.li):
-            if id == l["id"]:
-                return ind + 1
-        return False
 
     # Method to delete a task
-    def delete_task(self):
-        try:
-            id = int(input("Enter the task ID to delete: "))
-        except ValueError:
-            print("Please enter a valid ID.")
-            return
-
-        for ind, l in enumerate(self.li):
-            if id == l["id"]:
-                self.li.pop(ind)  # Remove task from the list
-                print(f"Task ID {id} has been deleted.")
-                return
-        
-        print("Task not found with the provided ID.")
+    def delete_task(self, ind):
+        if self.li.pop(ind):  # Remove task from the list
+            return True
+        return False
 
     # Method to show number of completed tasks
     def completed_tasks(self):
         if not self.li:  
-            print("No tasks available.")
-            return
-
+            return False
         # Using lambda 
         completed_count = len(list(filter(lambda x: x["is_complated"] == 1, self.li)))
-
-        print("Total of completed tasks is:", completed_count)
+        return completed_count
 
     # Method to display all tasks
     def display_tasks(self):
         if not self.li:
-            print("No tasks available.")
+            return False
         else:
-            print("Current tasks:")
-            for task in self.li:
-                status = "Completed" if task["is_complated"] == 1 else "Not Completed"
-                print(f"ID: {task['id']}, Task: {task['task']}, Priority: {task['priority']}, Status: {status}")
+            return self.li
 
 # Main interaction loop
 def main():
@@ -110,11 +93,33 @@ def main():
             except ValueError:
                 print("Please enter a valid ID.")
         elif choice == '3':
-            task_manager.delete_task()
+            try:
+                id = int(input("Enter the task ID to delete: "))
+                ind = task_manager.is_valid(id)
+                if ind > 0:
+                    if task_manager.delete_task(ind -1):
+                        print(f"Task ID {id} has been deleted.")
+                    else:
+                        print("Task not found with the provided ID.")
+                else:
+                    print("Task not found with the provided ID.")
+            except ValueError:
+                print("Please enter a valid ID.")
         elif choice == '4':
-            task_manager.display_tasks()
+            tasks = task_manager.display_tasks()
+            if tasks:
+                print("Current tasks:")
+                for task in tasks:
+                    status = "Completed" if task["is_complated"] == 1 else "Not Completed"
+                    print(f"ID: {task['id']}, Task: {task['task']}, Priority: {task['priority']}, Status: {status}")
+            else:
+                print("No tasks available.")
         elif choice == '5':
-            task_manager.completed_tasks()
+            completed_count = task_manager.completed_tasks()
+            if completed_count:
+                print("Total of completed tasks is:", completed_count)
+            else:
+                print("No tasks available.")
         elif choice == '6':
             print("Exiting task manager.")
             break
